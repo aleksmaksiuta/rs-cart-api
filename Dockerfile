@@ -1,22 +1,23 @@
-FROM node:12.22-alpine AS base
+FROM node:12-alpine AS base
+
 WORKDIR /app
 
-FROM base AS dependencies
-WORKDIR /app
+# Dependencies
 COPY package*.json ./
 RUN npm install
 
-FROM dependencies AS build
+#Build
 WORKDIR /app
 COPY . .
 RUN npm run build
 
-FROM base AS release
-WORKDIR /app
-COPY --from=dependencies /app/package*.json ./
+# Application
+FROM node:12-alpine AS application
+COPY --from=base /app/package*.json ./
 RUN npm install --only=production
-COPY --from=build /app/dist ./dist
+COPY --from=base /app/dist ./dist
 
+USER node
 ENV PORT=8080
 EXPOSE 8080
 
