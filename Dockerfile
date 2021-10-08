@@ -1,4 +1,4 @@
-FROM node:12.22-alpine AS base
+FROM node:12.22.6-alpine3.14 AS base
 WORKDIR /app
 
 FROM base AS dependencies
@@ -16,7 +16,6 @@ WORKDIR /app
 COPY --from=dependencies /app/package*.json ./
 RUN npm install --only=production
 COPY --from=build /app/dist ./dist
-COPY --from=build /app/Dockerfile ./
 
 ENV PORT=8080
 EXPOSE 8080
