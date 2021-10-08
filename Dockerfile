@@ -1,5 +1,4 @@
 FROM node:12.22.6-alpine3.14 AS base
-WORKDIR /app
 
 FROM base AS dependencies
 WORKDIR /app
